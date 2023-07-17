@@ -1,0 +1,95 @@
+import csv
+import os
+
+print("waka ama finals")
+"""
+username: admin
+password: navjotgill
+"""
+
+#Function that accepts takes in user important (login screen)!:P
+def entry():
+    username = input("Enter Username:")
+    password = input("Enter Password:")
+    return username, password
+
+score = 0
+
+#Loops up to three times if the wrong password is entered.
+#If the user inputs the wrong password three times, the code says access denied and exits.
+while True:
+    username, password = entry()
+
+    if password != "navjotgill":
+        score += 1
+        print("Incorrect details. Please try again.")
+    else:
+        break
+
+    if score == 3:
+        print("Access denied.")
+        exit()
+
+print("Welcome to waka amma results.")
+
+#variable that stores and shows where the wakanats2017 final csv files are at.
+resultyear = input("what year of results would you like to see:")
+if resultyear == "2017":
+  folder_path = 'WakaNats2017/'
+  
+  for file_name in os.listdir(folder_path):
+      if file_name.endswith(".csv") and "final" in file_name.lower():
+          file_path = os.path.join(folder_path, file_name)
+          print("Reading file:", file_path)
+  
+          #reads the csv finals that contain final in them for the wakanats 2017
+          try:
+              with open(file_path, 'r') as csv_file:
+                  csv_reader = csv.reader(csv_file)
+                  for line in csv_reader:
+                      print(line[2])
+          except Exception as e:
+              print("Error reading file:", file_path)
+              print("Error message:", str(e))
+if resultyear == "2018":
+  folder_path = 'WakaNats2018/'
+  
+  for file_name in os.listdir(folder_path):
+      if file_name.endswith(".csv") and "final" in file_name.lower():
+          file_path = os.path.join(folder_path, file_name)
+          print("Reading file:", file_path)
+  
+          #reads the csv finals that contain final in them for the wakanats 2018
+          try:
+              with open(file_path, 'r') as csv_file:
+                  csv_reader = csv.reader(csv_file)
+                  for line in csv_reader:
+                      print(line[2])
+          except Exception as e:
+              print("Error reading file:", file_path)
+              print("Error message:", str(e))
+
+
+
+
+
+#csv
+"""
+import pandas as pd
+
+# Read the CSV file
+data = pd.read_csv('path/to/file.csv')
+
+# Print the contents of the CSV file
+print(data)
+"""
+#excel
+"""
+import pandas as pd
+
+# Read the Excel file
+data = pd.read_excel('path/to/file.xlsx')
+
+# Print the contents of the Excel file
+print(data)
+"""
