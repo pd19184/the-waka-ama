@@ -1,0 +1,28 @@
+print("waka ama finals")
+"""
+username: admin
+password: navjotgill
+"""
+
+#Function that accepts takes in user important (login screen)!:P
+def entry():
+    username = input("Enter Username:")
+    password = input("Enter Password:")
+    return username, password
+
+score = 0
+
+#Loops up to three times if the wrong password is entered.
+#If the user inputs the wrong password three times, the code says access denied and exits.
+while True:
+    username, password = entry()
+
+    if password != "navjotgill":
+        score += 1
+        print("Incorrect details. Please try again.")
+    else:
+        break
+
+    if score == 3:
+        print("Access denied.")
+        exit()
