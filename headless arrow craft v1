@@ -1,0 +1,93 @@
+import org.dreambot.api.methods.container.impl.bank.Bank;
+import org.dreambot.api.methods.container.impl.Inventory;
+import org.dreambot.api.input.Mouse;
+import org.dreambot.api.methods.container.impl.bank.BankTab;
+import org.dreambot.api.methods.widget.Widgets;
+import org.dreambot.api.script.AbstractScript;
+import org.dreambot.api.script.Category;
+import org.dreambot.api.script.ScriptManifest;
+import org.dreambot.api.wrappers.widgets.WidgetChild;
+
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static org.dreambot.api.methods.widget.Widgets.getWidgets;
+
+@ScriptManifest(name = "Banker", description = "My new script", author = "paulatoetoe",
+        version = 1.0, category = Category.WOODCUTTING, image = "")
+public class TestScript extends AbstractScript {
+    private final Logger logger = Logger.getLogger("BankerScript");
+    private boolean hasBanked = false; // Flag to track if banking has occurred
+    private final Random random = new Random();
+
+    @Override
+    public int onLoop() {
+        logger.log(Level.INFO, "Starting onLoop() execution.");
+
+        if (!hasBanked) {
+            if (Bank.open()) {
+                logger.log(Level.INFO, "Bank is open. Depositing items.");
+                Bank.depositAllItems();
+                sleep(random.nextInt(1500) + 373); // Random sleep between 1-2.5 seconds
+
+                // Withdraw arrow shafts and feathers
+                Bank.withdrawAll("Arrow Shaft");
+                sleep(random.nextInt(1500) + 362); // Random sleep between 1-2.5 seconds
+                Bank.withdrawAll("Feather");
+                sleep(random.nextInt(1032) + 271); // Random sleep between 0.5-1.5 seconds
+
+                Bank.close();
+                hasBanked = true; // Set the flag to true after banking
+            } else {
+                logger.log(Level.INFO, "Bank is not open. Waiting.");
+                return 500; // Wait 500ms before next loop iteration
+            }
+        } else {
+            // Exit the bank and perform the desired actions
+            if (Bank.close()) {
+                // Click on Arrow Shaft
+                Inventory.get("Arrow shaft").interact("Use");
+                Mouse.click(); // Perform a left click
+
+                // Sleep for a short duration
+                sleep(random.nextInt(150) + 100);
+
+                // Click on Feather
+                Inventory.get("Feather").interact("Use");
+                Mouse.click(); // Perform a left click
+
+                // Sleep for a short duration
+                sleep(random.nextInt(150) + 100);
+
+                // Interact with the widget button to create headless arrows
+                WidgetChild buttonWidgetChild = getButtonWidgetChild();
+                if (buttonWidgetChild != null) {
+                    buttonWidgetChild.interact();
+                }
+
+                // Perform your set making logic here
+                // (assuming you have the required widgets and interfaces)
+            }
+
+            // Stopping the script
+            logger.log(Level.INFO, "Actions completed. Stopping the script.");
+            return -1;
+        }
+
+        logger.log(Level.INFO, "Finished onLoop() execution.");
+        return 500; // Wait 500ms before next loop iteration
+    }
+
+    private WidgetChild getButtonWidgetChild() {
+        // Replace these values with the actual widget ID and child sequence ID
+        int widgetId = 270;     // Widget ID
+        int childSequenceId = 14; // Child Sequence ID
+
+        return getWidgets().getWidgetChild(widgetId, childSequenceId);
+    }
+
+    private Widgets getWidgets() {
+        return null;
+    }
+}
